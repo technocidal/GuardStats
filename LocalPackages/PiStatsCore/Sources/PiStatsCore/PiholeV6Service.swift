@@ -192,6 +192,12 @@ extension PiholeV6Service {
             if let httpResponse = response as? HTTPURLResponse {
                 Log.network.info("✅ [V6] Received response: \(httpResponse.statusCode) for \(url.absoluteString)")
                 Log.network.debug("📊 [V6] Response data size: \(data.count) bytes")
+                
+                if httpResponse.statusCode == 401 || httpResponse.statusCode == 403 {
+                    Log.network.warning("🔐 [V6] Session expired or unauthorized for \(url.absoluteString), clearing cached auth")
+                    await clearSessionAuth()
+                    throw PiholeServiceError.invalidAuthenticationResponse
+                }
             }
             
             guard let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] else {
@@ -201,8 +207,11 @@ extension PiholeV6Service {
             
             Log.network.debug("🔍 [V6] Successfully parsed JSON with keys: \(Array(json.keys))")
             return json
+        } catch let error as PiholeServiceError {
+            throw error
         } catch {
             Log.network.error("💥 [V6] Network error for \(url.absoluteString): \(error.localizedDescription)")
+            await clearSessionAuth()
             throw PiholeServiceError.networkError(error)
         }
     }
@@ -230,6 +239,12 @@ extension PiholeV6Service {
             if let httpResponse = response as? HTTPURLResponse {
                 Log.network.info("✅ [V6] POST response: \(httpResponse.statusCode) for \(url.absoluteString)")
                 Log.network.debug("📊 [V6] Response data size: \(data.count) bytes")
+                
+                if httpResponse.statusCode == 401 || httpResponse.statusCode == 403 {
+                    Log.network.warning("🔐 [V6] Session expired or unauthorized for \(url.absoluteString), clearing cached auth")
+                    await clearSessionAuth()
+                    throw PiholeServiceError.invalidAuthenticationResponse
+                }
             }
 
             guard let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] else {
@@ -239,8 +254,11 @@ extension PiholeV6Service {
 
             Log.network.debug("🔍 [V6] Successfully parsed POST response with keys: \(Array(json.keys))")
             return json
+        } catch let error as PiholeServiceError {
+            throw error
         } catch {
             Log.network.error("💥 [V6] POST request failed for \(url.absoluteString): \(error.localizedDescription)")
+            await clearSessionAuth()
             throw PiholeServiceError.networkError(error)
         }
     }
@@ -330,6 +348,10 @@ extension PiholeV6Service {
         func getAuth() -> PiholeV6AuthResponse? {
             self.sessionAuth
         }
+        
+        func clearAuth() {
+            self.sessionAuth = nil
+        }
     }
 
     private func setSessionAuth(_ auth: PiholeV6AuthResponse?) async {
@@ -339,5 +361,8 @@ extension PiholeV6Service {
     private func getSessionAuth() async -> PiholeV6AuthResponse? {
         await authActor.getAuth()
     }
-
+    
+    private func clearSessionAuth() async {
+        await authActor.clearAuth()
+    }
 }
