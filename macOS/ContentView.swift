@@ -15,6 +15,7 @@ struct MacMainView: View {
     @State private var isPresentingSettings = false
     @State private var isPresentingAbout = false
     @State private var editingPihole: Pihole?
+    @State private var notificationObserver: NSObjectProtocol?
 
     var body: some View {
         VStack(alignment: .leading, spacing: LayoutConstants.MainView.defaultSpacing) {
@@ -44,7 +45,13 @@ struct MacMainView: View {
             }
         }
         .onAppear(perform: setupView)
-        .onDisappear { dataManager.stopUpdating() }
+        .onDisappear {
+            dataManager.stopUpdating()
+            if let observer = notificationObserver {
+                NotificationCenter.default.removeObserver(observer)
+                notificationObserver = nil
+            }
+        }
     }
     
     private func piholesList(_ dataUpdaters: [PiholeSummaryDataUpdater]) -> some View {
@@ -101,12 +108,14 @@ struct MacMainView: View {
     
     private func setupView() {
         dataManager.startUpdating()
-        NotificationCenter.default.addObserver(
-            forName: .showAddPiholeSheet,
-            object: nil,
-            queue: .main
-        ) { _ in
-            isPresentingAddSheet = true
+        if notificationObserver == nil {
+            notificationObserver = NotificationCenter.default.addObserver(
+                forName: .showAddPiholeSheet,
+                object: nil,
+                queue: .main
+            ) { _ in
+                isPresentingAddSheet = true
+            }
         }
     }
 

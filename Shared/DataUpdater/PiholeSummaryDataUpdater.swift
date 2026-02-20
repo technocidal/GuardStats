@@ -89,6 +89,7 @@ final class PiholeSummaryDataUpdater: Identifiable, ObservableObject, ErrorHandl
     private let service: PiholeService
     @Published private(set) var summary: PiholeSummaryData
     private var timer: Timer?
+    private var fetchTasks: [Task<Void, Never>] = []
 
     init(pihole: Pihole) {
         self.pihole = pihole
@@ -144,51 +145,62 @@ final class PiholeSummaryDataUpdater: Identifiable, ObservableObject, ErrorHandl
     }
 
     private func updateData() {
-        fetchSummaryData()
-        fetchStatusData()
-        fetchMonitorData()
-    }
+        cancelFetchTasks()
 
-    private func fetchMonitorData() {
-        guard service.pihole.piMonitor != nil else { return }
-        Task {
-            do {
-                let result = try await self.service.fetchMonitorMetrics()
-                await self.updateMonitorMetrics(with: result)
-            } catch {
-                self.handleError(error, context: .fetchingMonitorMetrics)
-            }
-        }
-    }
-
-    private func fetchSummaryData() {
-        Task {
+        fetchTasks.append(Task { [weak self] in
+            guard let self else { return }
             do {
                 let result = try await service.fetchSummary()
+                try Task.checkCancellation()
                 await updateSummary(with: result)
                 await clearError()
+            } catch is CancellationError {
+                // Task was cancelled, do nothing
             } catch {
                 handleError(error, context: .fetchingSummary)
             }
-        }
-    }
+        })
 
-    private func fetchStatusData() {
-        Task {
+        fetchTasks.append(Task { [weak self] in
+            guard let self else { return }
             do {
                 let status = try await service.fetchStatus()
+                try Task.checkCancellation()
                 await updateStatus(with: status)
                 await clearError()
+            } catch is CancellationError {
+                // Task was cancelled, do nothing
             } catch {
                 await updateStatus(with: .unknown)
                 handleError(error, context: .fetchingStatus)
             }
+        })
+
+        if service.pihole.piMonitor != nil {
+            fetchTasks.append(Task { [weak self] in
+                guard let self else { return }
+                do {
+                    let result = try await service.fetchMonitorMetrics()
+                    try Task.checkCancellation()
+                    await updateMonitorMetrics(with: result)
+                } catch is CancellationError {
+                    // Task was cancelled, do nothing
+                } catch {
+                    handleError(error, context: .fetchingMonitorMetrics)
+                }
+            })
         }
+    }
+
+    private func cancelFetchTasks() {
+        fetchTasks.forEach { $0.cancel() }
+        fetchTasks.removeAll()
     }
 
     func stopUpdating() {
         timer?.invalidate()
         timer = nil
+        cancelFetchTasks()
     }
 }
 
@@ -237,38 +249,40 @@ extension PiholeSummaryDataUpdater {
         withAnimation {
             summary.monitorMetrics = metrics
         }
-        // Force objectWillChange to fire to ensure UI updates
-        summary.objectWillChange.send()
-        objectWillChange.send()
     }
 
     @MainActor
     private func updateStatus(with status: PiholeStatus) {
-        objectWillChange.send()
-
         withAnimation {
             summary.status = status
         }
-
-        objectWillChange.send()
     }
 }
 
 // MARK: - Formatting Extensions
+
+private let decimalFormatter: NumberFormatter = {
+    let formatter = NumberFormatter()
+    formatter.numberStyle = .decimal
+    return formatter
+}()
+
+private let percentFormatter: NumberFormatter = {
+    let formatter = NumberFormatter()
+    formatter.numberStyle = .percent
+    formatter.maximumFractionDigits = 2
+    return formatter
+}()
+
 extension Int {
     func formatted() -> String {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        return formatter.string(from: NSNumber(value: self)) ?? "0"
+        decimalFormatter.string(from: NSNumber(value: self)) ?? "0"
     }
 }
 
 extension Double {
     func formattedPercentage() -> String {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .percent
-        formatter.maximumFractionDigits = 2
-        return formatter.string(from: NSNumber(value: self / 100)) ?? "0%"
+        percentFormatter.string(from: NSNumber(value: self / 100)) ?? "0%"
     }
 }
 
