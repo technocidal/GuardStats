@@ -106,15 +106,15 @@ public struct UserText {
     public static let domainsOnList = "Domains on List"
     public static let queriesBlocked = "Queries Blocked"
     
-    // MARK: - Pi-hole Setup
-    public static let piholeSetupTitle = "Pi-hole Setup"
+    // MARK: - AdGuard Home Setup
+    public static let piholeSetupTitle = "AdGuard Home Setup"
     public static let piholeSetupHostPlaceholder = "Host"
-    public static let piholeSetupPortPlaceholder = "Port (80)"
+    public static let piholeSetupPortPlaceholder = "Port (3000)"
     public static let piholeSetupDisplayName = "Display Name (Optional)"
-    public static let piholeSetupTokenPlaceholder = "Token (Optional)"
+    public static let piholeSetupTokenPlaceholder = "Password (Optional)"
     public static let piholeSetupEnablePiMonitor = "Enable Pi Monitor"
-    public static let piholeTokenFooterSection = "Token is required for some functionalities like disable/enable your pi-hole.\\n\\nYou can find the API Token on /etc/pihole/setupVars.conf under WEBPASSWORD or you can open the web UI and go to Settings -> API -> Show API Token"
-    public static let piholeTokenFooterV6Section = "For version 6.x, you can use your actual password for authenticating"
+    public static let piholeTokenFooterSection = "Password is required to enable or disable protection.\\n\\nUse the password you set up in AdGuard Home. To enter a custom username use the format username:password."
+    public static let piholeTokenFooterV6Section = "Use your AdGuard Home web interface password for authentication."
     
     // MARK: - Pi Monitor
     public static let piMonitorSetupPortPlaceholder = "Port (8088)"
@@ -124,9 +124,9 @@ public struct UserText {
     public static let piMonitorExplanation = "Pi Monitor is a service that helps you to monitor your Raspberry Pi by showing you information like temperature, memory usage and more!\\n\\nIn order to use it you'll need to install it in your Raspberry Pi."
     
     // MARK: - Navigation
-    public static let piholesNavigationTitle = "Pi-holes"
+    public static let piholesNavigationTitle = "Instances"
     public static let settingsNavigationTitle = "Settings"
-    public static let allPiholesTitle = "All Pi-holes"
+    public static let allPiholesTitle = "All Instances"
     public static let qrCodeScannerTitle = "Scanner"
     
     // MARK: - Settings Sections
@@ -137,21 +137,21 @@ public struct UserText {
             public static let enableDisable = "Enable / Disable"
             public static let piMonitor = "Pi Monitor"
             public static let about = "About"
-            public static let pihole = "Pi-hole"
+            public static let pihole = "AdGuard Home"
             public static let startup = "Startup"
         }
-        
+
         // Settings Options
-        public static let displayAsListToggle = "Display Pi-hole stats as list"
-        public static let displayAllPiholesToggle = "Display all Pi-holes in a single card"
-        public static let alwaysDisablePermanentlyToggle = "Always disable Pi-hole permanently"
+        public static let displayAsListToggle = "Display stats as list"
+        public static let displayAllPiholesToggle = "Display all instances in a single card"
+        public static let alwaysDisablePermanentlyToggle = "Always disable protection permanently"
         public static let temperatureScaleLabel = "Temperature Scale"
-        public static let startAtLoginToggle = "Start Pi Stats when macOS begins"
+        public static let startAtLoginToggle = "Start Guard Stats when macOS begins"
         public static let versionLabel = "Version"
-        public static let sourceCodeLink = "Pi Stats source code"
-        public static let macOSLink = "Pi Stats for macOS"
-        public static let sourceCodeURL = "https://github.com/Bunn/PiStats"
-        public static let macOSURL = "https://github.com/Bunn/PiStats"
+        public static let sourceCodeLink = "Guard Stats source code"
+        public static let macOSLink = "Guard Stats for macOS"
+        public static let sourceCodeURL = "https://github.com/technocidal/GuardStats"
+        public static let macOSURL = "https://github.com/technocidal/GuardStats"
         
         // Legacy properties for backward compatibility
         public static let sectionInterface = Sections.interface
@@ -165,6 +165,7 @@ public struct UserText {
         public static let piStatsSourceCode = sourceCodeLink
         public static let piStatsForMacOS = macOSLink
         public static let leaveReview = "Write a review on the App Store"
+
         public static let customizeDisableTimes = "Customize disable times"
         public static let piMonitorTemperature = temperatureScaleLabel
         public static let protocolHTTP = "HTTP"
@@ -184,99 +185,99 @@ public struct UserText {
     // MARK: - Platform-Specific Text
     #if os(macOS)
     public struct MainView {
-        public static let noPiholesTitle = "No Pi-holes Configured"
-        public static let getStartedMessage = "Get started by adding your first Pi-hole:"
-        public static let step1 = "1. Make sure your Pi-hole is running"
-        public static let step2 = "2. Note your Pi-hole's IP address"
-        public static let step3 = "3. Get your API token or password from Pi-hole settings"
+        public static let noPiholesTitle = "No Instances Configured"
+        public static let getStartedMessage = "Get started by adding your first AdGuard Home instance:"
+        public static let step1 = "1. Make sure AdGuard Home is running"
+        public static let step2 = "2. Note your AdGuard Home's IP address"
+        public static let step3 = "3. Have your AdGuard Home password ready"
         public static let step4 = "4. Click the button below to add it"
-        public static let addFirstPiholeButton = "Add Your First Pi-hole"
-        public static let addPiholeButton = "Add Pi-hole"
+        public static let addFirstPiholeButton = "Add Your First Instance"
+        public static let addPiholeButton = "Add Instance"
         public static let settingsButton = "Settings"
         public static let aboutButton = "About"
         public static let deleteButton = "Delete"
-        public static let editTooltip = "Edit Pi-hole settings"
+        public static let editTooltip = "Edit instance settings"
     }
-    
+
     public struct MenuBar {
-        public static let appName = "Pi Stats"
-        public static let noPiholesConfigured = "Pi Stats - No Pi-holes configured"
-        public static let allEnabled = "Pi Stats - All %d Pi-holes are enabled"
-        public static let allDisabled = "Pi Stats - All %d Pi-holes are disabled"
-        public static let mixedStatus = "Pi Stats - %d enabled, %d disabled"
-        public static let withErrors = "Pi Stats - %d of %d Pi-holes have errors"
+        public static let appName = "Guard Stats"
+        public static let noPiholesConfigured = "Guard Stats - No instances configured"
+        public static let allEnabled = "Guard Stats - All %d instances are enabled"
+        public static let allDisabled = "Guard Stats - All %d instances are disabled"
+        public static let mixedStatus = "Guard Stats - %d enabled, %d disabled"
+        public static let withErrors = "Guard Stats - %d of %d instances have errors"
     }
-    
+
     public struct Popover {
         public static let manageButton = "Manage"
-        public static let quitButton = "Quit Pi Stats"
-        public static let noPiholesMessage = "No Pi-holes configured or loading..."
-        public static let noPiholesTitle = "No Pi-holes Configured"
-        public static let noPiholesInstructions = "Click 'Manage' below to add your first Pi-hole"
-        public static let allPiholesTitle = "All Pi-holes"
+        public static let quitButton = "Quit Guard Stats"
+        public static let noPiholesMessage = "No instances configured or loading..."
+        public static let noPiholesTitle = "No Instances Configured"
+        public static let noPiholesInstructions = "Click 'Manage' below to add your first instance"
+        public static let allPiholesTitle = "All Instances"
         public static let dataSection = "Data"
         public static let deviceSection = "Device"
-        public static let disableOptionsTitle = "Disable Pi-hole"
+        public static let disableOptionsTitle = "Disable Protection"
         public static let disablePermanently = "Permanently"
         public static let cancelButton = "Cancel"
     }
-    
+
     public struct Commands {
-        public static let addPiholeMenu = "Add Pi-hole…"
-        public static let showPiStatsMenu = "Show Pi Stats"
+        public static let addPiholeMenu = "Add Instance…"
+        public static let showPiStatsMenu = "Show Guard Stats"
     }
-    
+
     public struct Setup {
-        public static let addPiholeTitle = "Add Pi-hole"
-        public static let editPiholeTitle = "Edit Pi-hole"
-        public static let piholeConfigurationSection = "Pi-hole Configuration"
+        public static let addPiholeTitle = "Add AdGuard Home"
+        public static let editPiholeTitle = "Edit AdGuard Home"
+        public static let piholeConfigurationSection = "AdGuard Home Configuration"
         public static let piMonitorOptionalSection = "Pi Monitor (Optional)"
         public static let dangerZoneSection = "Danger Zone"
         public static let hostLabel = "Host"
-        public static let hostPlaceholder = "192.168.1.100 or pi.local"
+        public static let hostPlaceholder = "192.168.1.100 or adguard.local"
         public static let displayNameLabel = "Display Name"
         public static let displayNamePlaceholder = "Optional friendly name"
         public static let portLabel = "Port"
-        public static let portPlaceholder = "80"
-        public static let apiTokenLabel = "API Token"
+        public static let portPlaceholder = "3000"
+        public static let apiTokenLabel = "Password"
         public static let passwordLabel = "Password"
-        public static let apiTokenPlaceholder = "Optional - enables additional features"
-        public static let passwordPlaceholder = "Required for Pi-hole v6"
-        public static let apiTokenHelp = "Find in /etc/pihole/setupVars.conf under WEBPASSWORD or in Web UI → Settings → API"
-        public static let passwordHelp = "Use your Pi-hole web interface password"
+        public static let apiTokenPlaceholder = "Optional - enables enable/disable"
+        public static let passwordPlaceholder = "AdGuard Home password"
+        public static let apiTokenHelp = "Use your AdGuard Home web interface password. For a custom username use username:password format."
+        public static let passwordHelp = "Use your AdGuard Home web interface password. For a custom username use username:password format."
         public static let enablePiMonitorLabel = "Enable Pi Monitor"
         public static let piMonitorPortPlaceholder = "8088"
         public static let whatsThisButton = "What's this?"
-        public static let deletePiholeLabel = "Delete Pi-hole"
-        public static let deletePiholeDescription = "This will permanently remove this Pi-hole from Pi Stats."
+        public static let deletePiholeLabel = "Delete Instance"
+        public static let deletePiholeDescription = "This will permanently remove this instance from Guard Stats."
         public static let piMonitorInfoTitle = "Pi Monitor"
         public static let piMonitorInfoMessage = "Pi Monitor is a service that helps you monitor your Raspberry Pi by showing information like temperature, memory usage and more! To use it, you'll need to install Pi Monitor on your Raspberry Pi."
         public static let learnMoreButton = "Learn More"
         public static let okButton = "OK"
         public static let piMonitorURL = "https://github.com/Bunn/pi_monitor"
     }
-    
+
     public struct About {
-        public static let appName = "Pi Stats"
-        public static let tagline = "Monitor your Pi-hole instances"
+        public static let appName = "Guard Stats"
+        public static let tagline = "Monitor your AdGuard Home instances"
         public static let versionFormat = "Version %@ (%@)"
-        public static let copyright = "© 2025 Fernando Bunn"
+        public static let copyright = "© 2025 technocidal"
         public static let websiteButton = "Website"
         public static let supportButton = "Support"
         public static let closeButton = "Close"
-        public static let websiteURL = "https://github.com/bunn/PiStats"
-        public static let supportURL = "https://github.com/bunn/PiStats/issues"
-        public static let sourceCodeURL = "https://github.com/Bunn/PiStats"
-        public static let macOSURL = "https://github.com/Bunn/PiStats"
+        public static let websiteURL = "https://github.com/technocidal/GuardStats"
+        public static let supportURL = "https://github.com/technocidal/GuardStats/issues"
+        public static let sourceCodeURL = "https://github.com/technocidal/GuardStats"
+        public static let macOSURL = "https://github.com/technocidal/GuardStats"
     }
     #else
     public struct MainView {
-        public static let addFirstPiholeCaption = "Tap here to add your first pi-hole"
+        public static let addFirstPiholeCaption = "Tap here to add your first AdGuard Home instance"
     }
     #endif
-    
+
     // MARK: - Disable Options
-    public static let disablePiholeOptionsTitle = "Disable Pi-hole"
+    public static let disablePiholeOptionsTitle = "Disable Protection"
     public static let disablePiholeOptionsPermanently = "Permanently"
     
     // MARK: - Custom Disable Times

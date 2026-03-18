@@ -4,6 +4,7 @@ import Foundation
 public enum PiholeVersion: String, CaseIterable, Identifiable, Sendable {
     case v5
     case v6
+    case adGuardHome
 
     public var id: String { self.rawValue }
 
@@ -13,6 +14,8 @@ public enum PiholeVersion: String, CaseIterable, Identifiable, Sendable {
             return "Version 5.x"
         case .v6:
             return "Version 6.x"
+        case .adGuardHome:
+            return "AdGuard Home"
         }
     }
 }

@@ -41,7 +41,7 @@ struct macOSApp: App {
         .windowResizability(.contentSize)
 
         .commands {
-            CommandMenu("Pi-hole") {
+            CommandMenu("AdGuard Home") {
                 Button(UserText.Commands.addPiholeMenu) {
                     NotificationCenter.default.post(name: .showAddPiholeSheet, object: nil)
                 }

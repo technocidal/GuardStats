@@ -23,6 +23,9 @@ public struct PiholeAPIClient: PiholeService {
         case .v6:
             self.service = PiholeV6Service(pihole, urlSession: urlSession)
             Log.network.info("🔧 [Client] Initialized V6 service for \(pihole.name)")
+        case .adGuardHome:
+            self.service = AdGuardHomeService(pihole, urlSession: urlSession)
+            Log.network.info("🔧 [Client] Initialized AdGuard Home service for \(pihole.name)")
         }
     }
 

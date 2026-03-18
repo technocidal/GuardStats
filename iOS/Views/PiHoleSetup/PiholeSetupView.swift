@@ -23,8 +23,8 @@ fileprivate class SetupViewModel: ObservableObject {
     @Published var isPiMonitorEnabled = false
     @Published var displayPiMonitorAlert = false
     @Published var httpType: SecureTag = .unsecure
-    @Published var selectedVersion: PiholeVersion = .v6
-    
+    @Published var selectedVersion: PiholeVersion = .adGuardHome
+
     private let storage = DefaultPiholeStorage()
     var onPiholeChanged: ((Pihole, Bool) -> Void)? // Bool indicates if it's a delete operation
 
@@ -38,15 +38,15 @@ fileprivate class SetupViewModel: ObservableObject {
             self.token = pihole.token ?? ""
             self.selectedVersion = pihole.version
             self.httpType = pihole.secure ? .secure : .unsecure
-            
+
             // Setup PiMonitor fields if available
             if let piMonitor = pihole.piMonitor {
                 self.isPiMonitorEnabled = true
                 self.piMonitorPort = "\(piMonitor.port ?? 8088)"
             }
         } else {
-            self.selectedVersion = .v6
-            self.port = "80" // Default port
+            self.selectedVersion = .adGuardHome
+            self.port = "3000" // Default AdGuard Home port
         }
     }
 
@@ -134,7 +134,7 @@ struct PiholeSetupView: View {
     private var piholeSettingsSection: some View {
         Section(
             header: Text(UserText.Settings.Sections.pihole),
-            footer: viewModel.selectedVersion == .v5 ? Text(UserText.piholeTokenFooterSection) : Text(UserText.piholeTokenFooterV6Section)
+            footer: Text(UserText.piholeTokenFooterV6Section)
         ) {
             LabeledTextField(
                 icon: SystemImages.piholeSetupHost,
@@ -182,23 +182,10 @@ struct PiholeSetupView: View {
     }
 
     private var tokenField: some View {
-        Group {
-            if viewModel.selectedVersion == .v5 {
-                HStack {
-                    Image(systemName: SystemImages.piholeSetupToken)
-                        .frame(width: imageWidthSize)
-                    SecureField(UserText.piholeSetupTokenPlaceholder, text: $viewModel.token)
-                    Image(systemName: SystemImages.piholeSetupTokenQRCode)
-                        .foregroundStyle(.blue)
-                        .onTapGesture { viewModel.isShowingScanner = true }
-                }
-            } else {
-                HStack {
-                    Image(systemName: SystemImages.piholeSetupToken)
-                        .frame(width: imageWidthSize)
-                    SecureField("Password", text: $viewModel.token)
-                }
-            }
+        HStack {
+            Image(systemName: SystemImages.piholeSetupToken)
+                .frame(width: imageWidthSize)
+            SecureField(UserText.Setup.passwordPlaceholder, text: $viewModel.token)
         }
     }
 
@@ -314,7 +301,7 @@ struct LabeledTextField: View {
 }
 
 #Preview {
-    let mockPihole = Pihole(name: "test", address: "123.123.123.123", version: .v5)
+    let mockPihole = Pihole(name: "test", address: "192.168.1.1", version: .adGuardHome)
     PiholeSetupView(pihole: mockPihole)
 }
 

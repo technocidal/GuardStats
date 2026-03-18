@@ -17,7 +17,7 @@ private final class MacPiholeSetupViewModel: ObservableObject {
     @Published var piMonitorPort = ""
     @Published var isPiMonitorEnabled = false
     @Published var httpType: MacSecureTag = .http
-    @Published var selectedVersion: PiholeVersion = .v6
+    @Published var selectedVersion: PiholeVersion = .adGuardHome
 
     private let storage = DefaultPiholeStorage()
 
@@ -42,8 +42,8 @@ private final class MacPiholeSetupViewModel: ObservableObject {
                 self.piMonitorPort = "\(piMonitor.port ?? 8088)"
             }
         } else {
-            self.selectedVersion = .v6
-            self.port = "80" // Default port
+            self.selectedVersion = .adGuardHome
+            self.port = "3000" // Default AdGuard Home port
         }
     }
 
@@ -200,19 +200,14 @@ struct MacPiholeSetupView: View {
                 )
                 
                 VStack(alignment: .leading, spacing: 4) {
-                    Text(viewModel.selectedVersion == .v5 ? UserText.Setup.apiTokenLabel : UserText.Setup.passwordLabel)
+                    Text(UserText.Setup.passwordLabel)
                         .font(.subheadline)
                         .fontWeight(.medium)
-                    
-                    SecureField(
-                        viewModel.selectedVersion == .v5 ? UserText.Setup.apiTokenPlaceholder : UserText.Setup.passwordPlaceholder,
-                        text: $viewModel.token
-                    )
-                    .textFieldStyle(.roundedBorder)
-                    
-                    Text(viewModel.selectedVersion == .v5 ? 
-                         UserText.Setup.apiTokenHelp :
-                         UserText.Setup.passwordHelp)
+
+                    SecureField(UserText.Setup.passwordPlaceholder, text: $viewModel.token)
+                        .textFieldStyle(.roundedBorder)
+
+                    Text(UserText.Setup.passwordHelp)
                         .font(.caption)
                         .foregroundColor(.secondary)
                         .fixedSize(horizontal: false, vertical: true)
