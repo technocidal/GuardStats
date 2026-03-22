@@ -852,9 +852,10 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Pi-Stats-Mobile-Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "Pi Stats";
+				INFOPLIST_KEY_CFBundleDisplayName = "Guard Stats";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Camera permission is necessary to read the API Token QRCode";
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Guard Stats needs local network access to connect to your AdGuard Home instance.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -888,9 +889,10 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Pi-Stats-Mobile-Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "Pi Stats";
+				INFOPLIST_KEY_CFBundleDisplayName = "Guard Stats";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Camera permission is necessary to read the API Token QRCode";
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Guard Stats needs local network access to connect to your AdGuard Home instance.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -1007,7 +1009,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Pi-Stats-Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "Pi Stats";
+				INFOPLIST_KEY_CFBundleDisplayName = "Guard Stats";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
@@ -1040,7 +1042,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Pi-Stats-Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "Pi Stats";
+				INFOPLIST_KEY_CFBundleDisplayName = "Guard Stats";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";

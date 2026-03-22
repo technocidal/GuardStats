@@ -9,5 +9,7 @@
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
 	</dict>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>Guard Stats needs local network access to connect to your AdGuard Home instance.</string>
 </dict>
 </plist>

@@ -12,13 +12,41 @@
 import Foundation
 import OSLog
 
+/// URLSessionDelegate that accepts self-signed / untrusted server certificates.
+/// This is necessary for AdGuard Home instances running HTTPS with a self-signed cert.
+private final class TrustingSessionDelegate: NSObject, URLSessionDelegate, @unchecked Sendable {
+    func urlSession(
+        _ session: URLSession,
+        didReceive challenge: URLAuthenticationChallenge,
+        completionHandler: @escaping @Sendable (URLSession.AuthChallengeDisposition, URLCredential?) -> Void
+    ) {
+        if challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust,
+           let trust = challenge.protectionSpace.serverTrust {
+            completionHandler(.useCredential, URLCredential(trust: trust))
+        } else {
+            completionHandler(.performDefaultHandling, nil)
+        }
+    }
+}
+
 internal final class AdGuardHomeService: PiholeService {
     public let pihole: Pihole
     private let urlSession: URLSession
 
-    init(_ pihole: Pihole, urlSession: URLSession = .shared) {
+    init(_ pihole: Pihole, urlSession: URLSession? = nil) {
         self.pihole = pihole
-        self.urlSession = urlSession
+        if let urlSession {
+            self.urlSession = urlSession
+        } else {
+            // Use a delegate that accepts self-signed HTTPS certificates,
+            // which are common on local AdGuard Home instances.
+            let delegate = TrustingSessionDelegate()
+            self.urlSession = URLSession(
+                configuration: .default,
+                delegate: delegate,
+                delegateQueue: nil
+            )
+        }
     }
 
     // MARK: - PiholeService
